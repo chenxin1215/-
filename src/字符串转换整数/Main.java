@@ -41,36 +41,63 @@ package 字符串转换整数;
 public class Main {
 
     public int myAtoi(String str) {
+        int result = 0;
 
-        boolean sign = false;
-        boolean fSign = false; // 负数标识
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-
-            System.out.println((int)c);
-            if (c == ' ') {
-                continue;
-            }
-
-            if (sign) {
-
-                
-
-            } else if ((int)c == 55) {
-                sign = true;
-                fSign = true;
-            } else if ((int)c >= 60 && (int)c <= 71) {
-                sign = true;
-            } else {
-                return 0;
-            }
-
+        if (str == null || str.equals("")) {
+            return result;
         }
 
+        boolean sign = false;
+        int index = 0;
+        // 去除空格
+        while (index < str.length()) {
+            char c = str.charAt(index);
+            if (c != ' ') {
+                break;
+            }
+            index++;
+        }
+
+        if (index == str.length()) {
+            return result;
+        }
+
+        if (str.charAt(index) == '-') {
+            sign = true;
+            index++;
+        } else if (str.charAt(index) == '+') {
+            index++;
+        }
+
+        while (index < str.length()) {
+            char c = str.charAt(index);
+
+            if (c > '9' || c < '0') {
+                break;
+            }
+
+            if (result > Integer.MAX_VALUE / 10 || (result == Integer.MAX_VALUE / 10
+                    && (c - '0') > Integer.MAX_VALUE % 10)) {
+                if (sign) {
+                    return Integer.MIN_VALUE;
+                } else {
+                    return Integer.MAX_VALUE;
+                }
+            }
+
+            result = result * 10 + c - '0';
+            index++;
+        }
+
+        if (sign) {
+            result = -result;
+        }
+
+        return result;
     }
 
     public static void main(String[] args) {
-        System.out.println(new Main().myAtoi(""));
+        System.out.println(new Main().myAtoi("-2147483646"));
     }
 
 }
